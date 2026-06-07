@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INAIL - Simulatore Clickday Bando ISI 2025</title>
+    <style>
+        :root {
+            --inail-blue: #003874;
+            --inail-green: #005A5B;
+            --bg-light: #f4f4f4;
+            --form-bg: #eaeaea;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            color: #333;
+        }
+
+        /* Header con Layout a Due Colonne */
+        header {
+            background-color: #ffffff;
+            padding: 15px 50px;
+            border-bottom: 4px solid var(--inail-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-text {
+            font-weight: bold;
+            font-size: 32px;
+            color: var(--inail-blue);
+            letter-spacing: -1px;
+        }
+
+        .logo-sub {
+            font-size: 9px;
+            color: #555;
+            text-transform: uppercase;
+            line-height: 1.1;
+            margin-left: 10px;
+            border-left: 1px solid #ccc;
+            padding-left: 10px;
+        }
+
+        /* Blocco Brand Destra */
+        .powered-by-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .powered-text {
+            font-size: 14px;
+            color: #555;
+            font-weight: normal;
+        }
+
+        .seba-logo {
+            height: 38px;
+            display: block;
+        }
+
+        .nav-strip {
+            background-color: var(--inail-green);
+            height: 15px;
+            width: 100%;
+        }
+
+        /* Container Principale */
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: #ffffff;
+            padding: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .page-title {
+            background-color: #ffffff;
+            padding: 15px 30px;
+            font-size: 20px;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            margin: 0;
+        }
+
+        .content-box {
+            background-color: var(--form-bg);
+            padding: 30px;
+            min-height: 400px;
+        }
+
+        .instruction-text {
+            font-size: 14px;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        /* Form e Quesiti */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 7px;
+            color: #222;
+            line-height: 1.4;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px 10px;
+            font-size: 14px;
+            border: 1px solid #aaa;
+            border-radius: 2px;
+            background-color: #fff;
+            box-sizing: border-box;
+        }
+
+        .checkbox-group {
+            margin-top: 15px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-group input {
+            margin: 0;
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Layout Riepilogo */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            row-gap: 15px;
+            font-size: 14px;
+            margin-bottom: 30px;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .summary-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .summary-value {
+            color: var(--inail-blue);
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: #444;
+            line-height: 1.5;
+            margin-top: 15px;
+        }
+
+        /* Pulsanti */
+        .buttons-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 30px 30px 30px;
+            background: var(--form-bg);
+        }
+
+        .btn {
+            padding: 10px 40px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 2px;
+        }
+
+        .btn-blue {
+            background-color: var(--inail-blue);
+            color: white;
+            transition: background-color 0.2s;
+        }
+
+        .btn-blue:hover {
+            background-color: #002550;
+        }
+
+        /* Banner Errore */
+        .error-banner {
+            display: none;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            font-size: 14px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        /* Stati delle Schermate */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Schermata di Successo */
+        .time-highlight {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--inail-green);
+            margin: 20px 0;
+            font-family: monospace;
+        }
+
+        /* Footer Blu */
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 11px;
+            color: #ffffff;
+            background-color: var(--inail-blue);
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <div class="logo-text">INAIL</div>
+            <div class="logo-sub">Istituto Nazionale per l'Assicurazione<br>contro gli Infortuni sul Lavoro</div>
+        </div>
+        <div class="powered-by-container">
+            <span class="powered-text">powered by</span>
+            <img class="seba-logo" alt="Seba Logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKEAAAAyCAMAAAADfUtpAAAAP1BMVEUAAAPzjl4UFTP2l1r9fnsTFDPzjl7yjl0AAFcTFDP/fz//AAD//wC/fz////9/f38AAAAAAAAAAAAAAAAAAAD3Bon0AAAAEHRSTlMB/PsZAp6fXgNeBAEBBAECVoeK9wAAA8hJREFUeNrtmdmS4yAMRbHFDkn+/28HO46NNkzXTFfNQ3jpiqO2DgKuJGLMPx3WwHINaJ//t/El/BJ+Cb+EX8Iv4T4i+XtnN0n4BGtzttmU0UurzbuZBVv+chpR/yQRQhdG0EJaAPqPAEUJS0qujZT0QBG7SA0ZYW3+QvBthI0Cqsi3Ux1mu50Bbpbc2g0nMkZul4YxbDEL/vrsQXLdjGxv1exCNmgLN8dppcNxRNFuTb0hjSEgzzvjg7y1PQkLG6GfS3v/Ko3E4yzarR0iIQTJdSaAgtExvRNQcdzCiKPoFLs1nYaYMEieMSKYsCgjHOHWIsgRVcAu3FaLCPJ8rV/WAbu5rCPPl0YOAC/EGcJOyIeAJ2IaeTZzgOdcpgiXfIgyjAE/4abigeQk3e1VMpc5wmOHtfxxG+6nRYSJHdlzJwqLShU0yoSbCHsiOlDKHkJ/R+ibURIk0LFlTlTO+dP9nznhcSqwMB4bjNi2qYTg2b9LhIkRSoARP3cSoW+PchttrTx6bFkIvTgXj+OQ5NKFCJKm4dI+zPVIIfDMODTPik29NfkBABnPZQviKM1KUujQN+Q4E8Iux2Ws5a1SwAfZflTSgiHpj6p0EiiRARoEnRD26d8a5NdaFKtwmeI86GU9pLFcZ4ZjMQylJyyh95vxNoRa5Ln49lbNX7cjpwhXnpf7Wgut6qYihahKR9izD/y7H8ZwHfcp6KuNyNLDLSfrYU3gfpUQ5G0oEt7WX79AmMl5uCFUGQ/EacInrbGVUtWzE5v7M+UZYeR5FtXPmmDzpgivXe385hp0wuVZRydF7afOrThNSJUCxdCjxPxCwgz1NCUlz00COYCc0r5EgRCr3Lm97Ivs0Ewy9dkj41csNANHMWS4iIl6XiZFqT8b5IL9tj6a1NdNOx/PUmrrYHFZa9j6xcj9GkUn+VzwRmx+WxSttdkScsuKjPB5J6m7jdT5ckJH69fIgp0+UuFJybKPV2CdClnNZbuVAKAF4iIeAuGZpORJbGkKqUvfflnlfNtGnYSJVQxCPc37FOe0thDuHcPLvg/tFKG5U+H43pwThc1HVqqfa5hhKog33aibrG/63t9WuOmOHpJEqoTjTniySHSDCzChfSvXtaGfiOEIUW9WBoCD26K30Fy1alXC7SerL3xBF1U73jY0NfHaHkSXwFY0BKG2cVOO5Y5BTn7iKfBAbzglQ+DVVxRKhiTfEVO7pFwobze/gV9v8ivYlnNIt98WIGjVl/toXRr9CnDZpdEvA/tt9HkfclxjS1ftj93uNNsb1278Af4eKEbnS4KnAAAAAElFTkSuQmCC">
+        </div>
+    </header>
+    <div class="nav-strip"></div>
+
+    <div class="container">
+        
+        <div id="screen-welcome" class="screen active">
+            <h2 class="page-title">Bando ISI 2025 - Validazione e Invio Domanda (Simulatore Dinamico)</h2>
+            <div class="content-box">
+                <p style="font-size: 16px; line-height: 1.6;">
+                    Benvenuto nel simulatore avanzato del Clickday per il <strong>Bando ISI INAIL 2025</strong>.<br><br>
+                    Per allenare al meglio la tua reattività ed evitare automatismi mnemonici, <strong>le 5 domande estratte e l'ordine delle opzioni all'interno delle tendine varieranno in modo del tutto casuale ad ogni sessione</strong>.<br><br>
+                    Il tempo di invio verrà calcolato in background a partire dal click sul pulsante "Avanti" di questa pagina, e si fermerà solo cliccando su "Invia" nella schermata di riepilogo finale. Sii rapido e preciso.
+                </p>
+
+                <hr style="border: 0; border-top: 1px solid #ccc; margin: 30px 0 20px 0;">
+                <h3 style="color: #003874; font-size: 16px; margin-bottom: 15px; text-transform: uppercase;">Avvertenze</h3>
+                <ul style="font-size: 14px; line-height: 1.6; color: #444; padding-left: 20px;">
+                    <li style="margin-bottom: 8px;">Non è consentito utilizzare strumenti automatici di invio.</li>
+                    <li style="margin-bottom: 8px;">Non deve essere aperta più di una sessione con le medesime credenziali.</li>
+                    <li style="margin-bottom: 8px;">In caso di invii multipli farà fede l’orario di arrivo del primo invio; i successivi invii oltreché inutili sono controproducenti ai fini del regolare svolgimento della procedura.</li>
+                    <li style="margin-bottom: 8px;">Sarà inutile ripetere l’invio se il sistema ha già risposto con il messaggio di presa in carico. I successivi invii porteranno ad un semplice messaggio informativo sul fatto che l’invio è già stato effettuato.</li>
+                </ul>
+                <p style="font-size: 14px; line-height: 1.6; color: #444; margin-top: 20px; background-color: #fff; padding: 15px; border-left: 4px solid var(--inail-green);">
+                    Si consiglia di utilizzare, se possibile, uno schermo grande in modo da poter visualizzare la schermata nella pagina seguente.<br>
+                    Si precisa che il web browser dell’utente deve avere javascript abilitato.
+                </p>
+                </div>
+            <div class="buttons-container" style="justify-content: flex-end;">
+                <button class="btn btn-blue" onclick="startSimulation()">Avanti</button>
+            </div>
+        </div>
+
+        <div id="screen-clickday" class="screen">
+            <h2 class="page-title">Bando ISI 2025 - Convalida e invio della domanda</h2>
+            
+            <div class="content-box">
+                <div id="error-message" class="error-banner">
+                    Attenzione: Uno o più dati inseriti non sono corretti oppure le dichiarazioni obbligatorie non sono state spuntate. Verificare e riprovare.
+                </div>
+
+                <div class="instruction-text">* I campi contrassegnati dal simbolo * sono obbligatori.</div>
+                <div class="instruction-text" style="font-weight: bold; margin-bottom: 25px;">Per procedere con l'invio della domanda è necessario compilare i seguenti campi:</div>
+
+                <div id="dynamic-questions-container"></div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="check-regole">
+                    <label for="check-regole">* Dichiarazione di presa visione delle regole tecniche.</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="check-robot">
+                    <label for="check-robot">* Non sono un robot</label>
+                </div>
+            </div>
+
+            <div class="buttons-container">
+                <button class="btn btn-blue" onclick="location.reload()">Esci</button>
+                <button class="btn btn-blue" onclick="goToSummary()">Avanti</button>
+            </div>
+        </div>
+
+        <div id="screen-summary" class="screen">
+            <h2 class="page-title">INSERIMENTO DATI</h2>
+            
+            <div class="content-box">
+                <h3 style="margin-top: 0; margin-bottom: 20px; font-weight: normal; color: #333;">Riepilogo dati inseriti</h3>
+                
+                <div class="summary-grid" id="summary-content">
+                    </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="check-informativa">
+                    <label for="check-informativa">
+                        <strong>Informativa:</strong><br>
+                        * I dati inseriti potrebbero essere oggetto di verifica durante la lavorazione della domanda.
+                    </label>
+                </div>
+
+                <div class="info-text">
+                    Cliccare sul pulsante <strong>Modifica</strong> per modificare i dati inseriti.<br>
+                    Cliccare sul pulsante <strong>Invia</strong> per confermare i dati inseriti ed inviare la domanda.
+                </div>
+                
+                <div style="font-size: 11px; margin-top: 20px;">* Campi obbligatori</div>
+            </div>
+
+            <div class="buttons-container">
+                <button class="btn btn-blue" onclick="location.reload()">Esci</button>
+                <div>
+                    <button class="btn btn-blue" style="margin-right: 15px;" onclick="goBackToEdit()">Modifica</button>
+                    <button class="btn btn-blue" onclick="submitApplication()">Invia</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-success" class="screen">
+            <h2 class="page-title">Invio Domanda Effettuato con Successo</h2>
+            <div class="content-box" style="text-align: center;">
+                <p style="font-size: 18px; color: #155724; text-align:center;">
+                    <strong>Congratulazioni!</strong> La domanda è stata trasmessa correttamente ai sistemi informatici dell'ente.
+                </p>
+                <p style="margin-top: 30px; font-size: 15px; text-align:center;">Il tuo tempo di elaborazione totale (inserimento + riepilogo) è stato di:</p>
+                <div class="time-highlight" id="final-time" style="text-align:center;">00:00:000</div>
+                <p style="font-size: 13px; color: #666; margin-top: 20px; text-align:center;">
+                    L'estrazione dei quesiti e il mescolamento delle opzioni sono casuali ad ogni avvio. Riprova per ottimizzare la velocità.
+                </p>
+            </div>
+            <div class="buttons-container" style="justify-content: center;">
+                <button class="btn btn-blue" onclick="location.reload()">Riprova</button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        ISTITUTO NAZIONALE PER L'ASSICURAZIONE CONTRO GLI INFORTUNI SUL LAVORO - P. IVA 00968951004
+    </footer>
+
+    <script>
+        // ARCHIVIO DOMANDE STILE INAIL
+        const questionDatabase = [
+            { id: 1, text: "* Selezionare, con riguardo all'ordine di presentazione nella cifra, la somma delle cifre diverse da zero presenti nello stanziamento di 508.000.000,00 euro <strong>(5+8=13)</strong>:", correct: "13", options: ["11", "13", "58", "5", "15"] },
+            { id: 2, text: "* Selezionare il numero dei tre colori della bandiera italiana <strong>(3)</strong>:", correct: "3", options: ["1", "2", "3", "4", "5"] },
+            { id: 3, text: "* Selezionare le ultime 2 cifre dell'anno del bando corrente <strong>(25)</strong>:", correct: "25", options: ["21", "23", "24", "25", "26"] },
+            { id: 4, text: "* Selezionare il numero degli assi di finanziamento previsti nel bando corrente <strong>(5)</strong>:", correct: "5", options: ["3", "4", "5", "6", "7"] },
+            { id: 5, text: "* Selezionare l'identificativo dell'edizione del bando corrente <strong>(ISI2025)</strong>:", correct: "ISI2025", options: ["INAIL25", "BANDO25", "ISI2025", "ISI2024", "DOMANDA"] },
+            { id: 6, text: "* Selezionare il numero di lettere vocali contenute nella sigla istituzionale 'INAIL' <strong>(3)</strong>:", correct: "3", options: ["2", "3", "4", "5", "1"] },
+            { id: 7, text: "* Selezionare la data corretta del Momento 1 indicata nell'avviso pubblico <strong>(27/10/2025)</strong>:", correct: "27/10/2025", options: ["27/10/2025", "27/11/2025", "20/10/2025", "15/10/2025", "27/10/2024"] },
+            { id: 8, text: "* Selezionare la somma dei decimali relativi alla cifra fittizia 301.200.000,01 euro <strong>(0+1=1)</strong>:", correct: "1", options: ["10", "1", "0", "2", "11"] },
+            { id: 9, text: "* Selezionare il numero complessivo di giorni di cui è composto il mese di Novembre <strong>(30)</strong>:", correct: "30", options: ["28", "29", "30", "31", "15"] },
+            { id: 10, text: "* Selezionare l'acronimo letterale identificativo dei finanziamenti INAIL alle imprese <strong>(ISI)</strong>:", correct: "ISI", options: ["ISI", "INAIL", "IRES", "BANDO", "PRIN"] },
+            { id: 11, text: "* Seleziona il giorno della data odierna fittizia <strong>(11)</strong>:", correct: "11", options: ["09", "10", "11", "12", "13"] },
+            { id: 12, text: "* Seleziona il mese della data odierna <strong>(Novembre)</strong>:", correct: "Novembre", options: ["Settembre", "Ottobre", "Novembre", "Dicembre", "Gennaio"] },
+            { id: 13, text: "* Seleziona l'anno della data odierna <strong>(2025)</strong>:", correct: "2025", options: ["2023", "2024", "2025", "2026", "2027"] },
+            { id: 14, text: "* Seleziona, nell'ordine corretto, le vocali contenute nelle parole \"Bando ISI\" <strong>(aoii)</strong>:", correct: "aoii", options: ["aoi", "aoii", "aaoi", "oaii", "ioia"] },
+            { id: 15, text: "* Seleziona, a partire dal segno includendo gli estremi, dal quarto (4°) al quindicesimo (15°) carattere, del codice identificativo assegnato +2c70323bc295b0a... <strong>(70323bc295b)</strong>:", correct: "70323bc295b", options: ["70323bc295b", "c70323bc295b", "0323bc295b0", "3bc295b0a", "2c70323bc29"] }
+        ];
+
+        let startTime;
+        let selectedQuestions = [];
+
+        // Mescolamento Array (Fisher-Yates)
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function generateQuiz() {
+            let shuffledDb = shuffle([...questionDatabase]);
+            selectedQuestions = shuffledDb.slice(0, 5); // Estrae 5 domande
+
+            const container = document.getElementById('dynamic-questions-container');
+            container.innerHTML = "";
+
+            selectedQuestions.forEach((q, index) => {
+                let shuffledOptions = shuffle([...q.options]);
+                
+                let html = `
+                    <div class="form-group">
+                        <label>${q.text}</label>
+                        <select id="dynamic-q-${index}">
+                            <option value="">- seleziona opzione -</option>
+                            ${shuffledOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+        }
+
+        function startSimulation() {
+            generateQuiz();
+            document.getElementById('screen-welcome').classList.remove('active');
+            document.getElementById('screen-clickday').classList.add('active');
+            
+            // Il cronometro parte alla vista della seconda schermata e si ferma solo dopo aver cliccato "Invia" nella terza
+            startTime = performance.now();
+        }
+
+        // Passa dalla schermata form alla schermata riepilogo (SENZA VALIDARE)
+        function goToSummary() {
+            // Generazione Dati Fittizi di base (come da richiesta)
+            let summaryHTML = `
+                <div class="summary-label">Data odierna - Giorno:</div><div class="summary-value">18</div>
+                <div class="summary-label">Data odierna - Mese:</div><div class="summary-value">Giugno</div>
+                <div class="summary-label">Data odierna - Anno:</div><div class="summary-value">2026</div>
+                <div class="summary-label">Nome Utente:</div><div class="summary-value">Mario Rossi</div>
+            `;
+
+            // Mappatura dinamica delle risposte selezionate
+            selectedQuestions.forEach((q, index) => {
+                let userAns = document.getElementById(`dynamic-q-${index}`).value;
+                // Rimuovo i tag HTML come <strong> dalla stringa della domanda per stampare un'etichetta pulita
+                let cleanLabel = q.text.replace(/<[^>]*>?/gm, '').replace(':','');
+                
+                summaryHTML += `
+                    <div class="summary-label">${cleanLabel}:</div>
+                    <div class="summary-value">${userAns !== "" ? userAns : '- non selezionato -'}</div>
+                `;
+            });
+
+            // Controllo della Dichiarazione Regole Tecniche
+            const checkRegole = document.getElementById('check-regole').checked;
+            summaryHTML += `
+                <div class="summary-label">Dichiarazione:</div>
+                <div class="summary-value">${checkRegole ? 'Ho preso visione delle regole tecniche.' : 'Non spuntato'}</div>
+            `;
+
+            // Inserisce i dati nel DOM
+            document.getElementById('summary-content').innerHTML = summaryHTML;
+
+            // Transizione Schermate
+            document.getElementById('screen-clickday').classList.remove('active');
+            document.getElementById('screen-summary').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Ritorna al form (tasto Modifica)
+        function goBackToEdit() {
+            document.getElementById('screen-summary').classList.remove('active');
+            document.getElementById('screen-clickday').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Controllo Validazione e Invio Finale
+        function submitApplication() {
+            document.getElementById('error-message').style.display = 'none';
+            let allCorrect = true;
+
+            // Validazione risposte alle tendine
+            selectedQuestions.forEach((q, index) => {
+                let userAns = document.getElementById(`dynamic-q-${index}`).value;
+                if (userAns !== q.correct) {
+                    allCorrect = false;
+                }
+            });
+
+            // Validazione Checkbox obbligatori (entrambe le schermate)
+            const checkRegole = document.getElementById('check-regole').checked;
+            const checkRobot = document.getElementById('check-robot').checked;
+            const checkInformativa = document.getElementById('check-informativa').checked;
+
+            if (allCorrect && checkRegole && checkRobot && checkInformativa) {
+                // Ferma il Timer e calcola
+                const endTime = performance.now();
+                const timeDiff = endTime - startTime;
+
+                const minutes = Math.floor(timeDiff / 60000);
+                const seconds = Math.floor((timeDiff % 60000) / 1000);
+                const milliseconds = Math.floor(timeDiff % 1000);
+
+                const formattedTime = 
+                    (minutes < 10 ? "0" : "") + minutes + " min, " + 
+                    (seconds < 10 ? "0" : "") + seconds + " sec e " + 
+                    (milliseconds < 100 ? (milliseconds < 10 ? "00" : "0") : "") + milliseconds + " msec";
+
+                document.getElementById('final-time').innerText = formattedTime;
+
+                // Mostra Successo
+                document.getElementById('screen-summary').classList.remove('active');
+                document.getElementById('screen-success').classList.add('active');
+                window.scrollTo(0, 0);
+            } else {
+                // In caso di errore (risposte errate o checkbox mancanti), torna al modulo e mostra l'errore
+                document.getElementById('screen-summary').classList.remove('active');
+                document.getElementById('screen-clickday').classList.add('active');
+                document.getElementById('error-message').style.display = 'block';
+                window.scrollTo(0, 0);
+            }
+        }
+    </script>
+</body>
+</html>
