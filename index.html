@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INAIL - Simulatore Clickday Bando ISI 2025</title>
+    <style>
+        :root {
+            --inail-blue: #003874;
+            --inail-green: #005A5B;
+            --bg-light: #f4f4f4;
+            --form-bg: #eaeaea;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            color: #333;
+        }
+
+        header {
+            background-color: #ffffff;
+            padding: 15px 50px;
+            border-bottom: 4px solid var(--inail-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-text {
+            font-weight: bold;
+            font-size: 32px;
+            color: var(--inail-blue);
+            letter-spacing: -1px;
+        }
+
+        .logo-sub {
+            font-size: 9px;
+            color: #555;
+            text-transform: uppercase;
+            line-height: 1.1;
+            margin-left: 10px;
+            border-left: 1px solid #ccc;
+            padding-left: 10px;
+        }
+
+        .powered-by-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .powered-text {
+            font-size: 14px;
+            color: #555;
+            font-weight: normal;
+        }
+
+        .seba-logo {
+            height: 38px;
+            display: block;
+        }
+
+        .nav-strip {
+            background-color: var(--inail-green);
+            height: 15px;
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: #ffffff;
+            padding: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .page-title {
+            background-color: #ffffff;
+            padding: 15px 30px;
+            font-size: 20px;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            margin: 0;
+        }
+
+        .content-box {
+            background-color: var(--form-bg);
+            padding: 30px;
+            min-height: 400px;
+        }
+
+        .instruction-text {
+            font-size: 14px;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 7px;
+            color: #222;
+            line-height: 1.4;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px 10px;
+            font-size: 14px;
+            border: 1px solid #aaa;
+            border-radius: 2px;
+            background-color: #fff;
+            box-sizing: border-box;
+        }
+
+        .checkbox-group {
+            margin-top: 15px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-group input {
+            margin: 0;
+            width: 16px;
+            height: 16px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            row-gap: 15px;
+            font-size: 14px;
+            margin-bottom: 30px;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .summary-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .summary-value {
+            color: var(--inail-blue);
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: #444;
+            line-height: 1.5;
+            margin-top: 15px;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 30px 30px 30px;
+            background: var(--form-bg);
+        }
+
+        .btn {
+            padding: 10px 40px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 2px;
+        }
+
+        .btn-blue {
+            background-color: var(--inail-blue);
+            color: white;
+            transition: background-color 0.2s;
+        }
+
+        .btn-blue:hover {
+            background-color: #002550;
+        }
+
+        .error-banner {
+            display: none;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            font-size: 14px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .time-highlight {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--inail-green);
+            margin: 20px 0;
+            font-family: monospace;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 11px;
+            color: #ffffff;
+            background-color: var(--inail-blue);
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <div class="logo-text">INAIL</div>
+            <div class="logo-sub">Istituto Nazionale per l'Assicurazione<br>contro gli Infortuni sul Lavoro</div>
+        </div>
+        <div class="powered-by-container">
+            <span class="powered-text">powered by</span>
+            <img class="seba-logo" alt="Seba Logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKEAAAAyCAMAAAADfUtpAAAAP1BMVEUAAAPzjl4UFTP2l1r9fnsTFDPzjl7yjl0AAFcTFDP/fz//AAD//wC/fz////9/f38AAAAAAAAAAAAAAAAAAAD3Bon0AAAAEHRSTlMB/PsZAp6fXgNeBAEBBAECVoeK9wAAA8hJREFUeNrtmdmS4yAMRbHFDkn+/28HO46NNkzXTFfNQ3jpiqO2DgKuJGLMPx3WwHINaJ//t/El/BJ+Cb+EX8Iv4T4i+XtnN0n4BGtzttmU0UurzbuZBVv+chpR/yQRQhdG0EJaAPqPAEUJS0qujZT0QBG7SA0ZYW3+QvBthI0Cqsi3Ux1mu50Bbpbc2g0nMkZul4YxbDEL/vrsQXLdjGxv1exCNmgLN8dppcNxRNFuTb0hjSEgzzvjg7y1PQkLG6GfS3v/Ko3E4yzarR0iIQTJdSaAgtExvRNQcdzCiKPoFLs1nYaYMEieMSKYsCgjHOHWIsgRVcAu3FaLCPJ8rV/WAbu5rCPPl0YOAC/EGcJOyIeAJ2IaeTZzgOdcpgiXfIgyjAE/4abigeQk3e1VMpc5wmOHtfxxG+6nRYSJHdlzJwqLShU0yoSbCHsiOlDKHkJ/R+ibURIk0LFlTlTO+dP9nznhcSqwMB4bjNi2qYTg2b9LhIkRSoARP3cSoW+PchttrTx6bFkIvTgXj+OQ5NKFCJKm4dI+zPVIIfDMODTPik29NfkBABnPZQviKM1KUujQN+Q4E8Iux2Ws5a1SwAfZflTSgiHpj6p0EiiRARoEnRD26d8a5NdaFKtwmeI86GU9pLFcZ4ZjMQylJyyh95vxNoRa5Ln49lbNX7cjpwhXnpf7Wgut6qYihahKR9izD/y7H8ZwHfcp6KuNyNLDLSfrYU3gfpUQ5G0oEt7WX79AmMl5uCFUGQ/EacInrbGVUtWzE5v7M+UZYeR5FtXPmmDzpgivXe385hp0wuVZRydF7afOrThNSJUCxdCjxPxCwgz1NCUlz00COYCc0r5EgRCr3Lm97Ivs0Ewy9dkj41csNANHMWS4iIl6XiZFqT8b5IL9tj6a1NdNOx/PUmrrYHFZa9j6xcj9GkUn+VzwRmx+WxSttdkScsuKjPB5J6m7jdT5ckJH69fIgp0+UuFJybKPV2CdClnNZbuVAKAF4iIeAuGZpORJbGkKqUvfflnlfNtGnYSJVQxCPc37FOe0thDuHcPLvg/tFKG5U+H43pwThc1HVqqfa5hhKog33aibrG/63t9WuOmOHpJEqoTjTniySHSDCzChfSvXtaGfiOEIUW9WBoCD26K30Fy1alXC7SerL3xBF1U73jY0NfHaHkSXwFY0BKG2cVOO5Y5BTn7iKfBAbzglQ+DVVxRKhiTfEVO7pFwobze/gV9v8ivYlnNIt98WIGjVl/toXRr9CnDZpdEvA/tt9HkfclxjS1ftj93uNNsb1278Af4eKEbnS4KnAAAAAElFTkSuQmCC">
+        </div>
+    </header>
+    <div class="nav-strip"></div>
+
+    <div class="container">
+        
+        <div id="screen-welcome" class="screen active">
+            <h2 class="page-title">Bando ISI 2025 - Validazione e Invio Domanda (Simulatore Bilanciato)</h2>
+            <div class="content-box">
+                <p style="font-size: 16px; line-height: 1.6;">
+                    Benvenuto nel simulatore ad **imprevedibilità bilanciata**.<br><br>
+                    I dati variano matematicamente ad ogni avvio. Per mantenere costante il livello di sfida, **l'algoritmo garantisce l'estrazione fissa di quesiti veloci e di almeno una stringa strutturata complessa**, mescolandone la posizione.<br><br>
+                    Il tempo di elaborazione totale partirà premendo "Avanti". Buona simulazione.
+                </p>
+
+                <hr style="border: 0; border-top: 1px solid #ccc; margin: 30px 0 20px 0;">
+                <h3 style="color: #003874; font-size: 16px; margin-bottom: 15px; text-transform: uppercase;">Avvertenze</h3>
+                <ul style="font-size: 14px; line-height: 1.6; color: #444; padding-left: 20px;">
+                    <li style="margin-bottom: 8px;">Non è consentito utilizzare strumenti automatici di invio.</li>
+                    <li style="margin-bottom: 8px;">Non deve essere aperta più di una sessione con le medesime credenziali.</li>
+                    <li style="margin-bottom: 8px;">In caso di invii multipli farà fede l’orario di arrivo del primo invio.</li>
+                </ul>
+                <p style="font-size: 14px; line-height: 1.6; color: #444; margin-top: 20px; background-color: #fff; padding: 15px; border-left: 4px solid var(--inail-green);">
+                    Si consiglia di utilizzare, se possibile, uno schermo grande in modo da poter visualizzare la schermata nella pagina seguente.<br>
+                    Si precisa che il web browser dell’utente deve avere javascript abilitato.
+                </p>
+            </div>
+            <div class="buttons-container" style="justify-content: flex-end;">
+                <button class="btn btn-blue" onclick="startSimulation()">Avanti</button>
+            </div>
+        </div>
+
+        <div id="screen-clickday" class="screen">
+            <h2 class="page-title">Bando ISI 2025 - Convalida e invio della domanda</h2>
+            
+            <div class="content-box">
+                <div id="error-message" class="error-banner">
+                    Attenzione: Uno o più dati inseriti non sono corretti oppure le dichiarazioni obbligatorie non sono state spuntate. Verificare e riprovare.
+                </div>
+
+                <div class="instruction-text">* I campi contrassegnati dal simbolo * sono obbligatori.</div>
+                <div class="instruction-text" style="font-weight: bold; margin-bottom: 25px;">Per procedere con l'invio della domanda è necessario compilare i seguenti campi:</div>
+
+                <div id="dynamic-questions-container"></div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="check-regole">
+                    <label for="check-regole">* Dichiarazione di presa visione delle regole tecniche.</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="check-robot">
+                    <label for="check-robot">* Non sono un robot</label>
+                </div>
+            </div>
+
+            <div class="buttons-container">
+                <button class="btn btn-blue" onclick="location.reload()">Esci</button>
+                <button class="btn btn-blue" onclick="goToSummary()">Avanti</button>
+            </div>
+        </div>
+
+        <div id="screen-summary" class="screen">
+            <h2 class="page-title">INSERIMENTO DATI</h2>
+            
+            <div class="content-box">
+                <h3 style="margin-top: 0; margin-bottom: 20px; font-weight: normal; color: #333;">Riepilogo dati inseriti</h3>
+                
+                <div class="summary-grid" id="summary-content"></div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="check-informativa">
+                    <label for="check-informativa">
+                        <strong>Informativa:</strong><br>
+                        * I dati inseriti potrebbero essere oggetto di verifica durante la lavorazione della domanda.
+                    </label>
+                </div>
+
+                <div class="info-text">
+                    Cliccare sul pulsante <strong>Modifica</strong> per modificare i dati inseriti.<br>
+                    Cliccare sul pulsante <strong>Invia</strong> per confermare i dati inseriti ed inviare la domanda.
+                </div>
+            </div>
+
+            <div class="buttons-container">
+                <button class="btn btn-blue" onclick="location.reload()">Esci</button>
+                <div>
+                    <button class="btn btn-blue" style="margin-right: 15px;" onclick="goBackToEdit()">Modifica</button>
+                    <button class="btn btn-blue" onclick="submitApplication()">Invia</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-success" class="screen">
+            <h2 class="page-title">Invio Domanda Effettuato con Successo</h2>
+            <div class="content-box" style="text-align: center;">
+                <p style="font-size: 18px; color: #155724; text-align:center;">
+                    <strong>Congratulazioni!</strong> La domanda è stata trasmessa correttamente.
+                </p>
+                <p style="margin-top: 30px; font-size: 15px; text-align:center;">Il tuo tempo di elaborazione totale reale è stato di:</p>
+                <div class="time-highlight" id="final-time" style="text-align:center;">00:00:000</div>
+                <p style="font-size: 13px; color: #666; margin-top: 20px; text-align:center;">
+                    Le variabili cambiano ad ogni sessione, includendo sempre stringhe complesse. Ottimo allenamento visivo!
+                </p>
+            </div>
+            <div class="buttons-container" style="justify-content: center;">
+                <button class="btn btn-blue" onclick="location.reload()">Riprova</button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        ISTITUTO NAZIONALE PER L'ASSICURAZIONE CONTRO GLI INFORTUNI SUL LAVORO - P. IVA 00968951004
+    </footer>
+
+    <script>
+        let startTime;
+        let generatedQuestions = [];
+
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // COSTRUTTORE DI QUIZ CON RIGIDA REGOLA DI COMPOSIZIONE
+        function generateProceduralQuestions() {
+            let flashPool = [];
+            let longPool = [];
+            generatedQuestions = [];
+
+            // --- GENERAZIONE DEI BLOCCHI COMPONENTI ---
+
+            // Flash 1: Giorno Random
+            let randGiorno = Math.floor(Math.random() * 28) + 1;
+            let giornoPad = randGiorno < 10 ? "0" + randGiorno : randGiorno.toString();
+            flashPool.push({
+                text: `* Seleziona il giorno della data fittizia visualizzata a sistema <strong>(${giornoPad})</strong>:`,
+                correct: giornoPad,
+                options: shuffle([giornoPad, "04", "12", "19", "26"])
+            });
+
+            // Flash 2: Mese Random
+            const mesi = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+            let randMeseIdx = Math.floor(Math.random() * 12);
+            let meseScelto = mesi[randMeseIdx];
+            let mesiAlternativi = mesi.filter(m => m !== meseScelto);
+            shuffle(mesiAlternativi);
+            flashPool.push({
+                text: `* Seleziona il mese della data fittizia visualizzata a sistema <strong>(${meseScelto})</strong>:`,
+                correct: meseScelto,
+                options: shuffle([meseScelto, mesiAlternativi[0], mesiAlternativi[1], "Novembre", "Giugno"])
+            });
+
+            // Flash 3: Codice Procedura Breve Dinamico
+            let randProceduraNum = Math.floor(Math.random() * 800) + 100;
+            let codCorretto = `ISI-B${randProceduraNum}`;
+            flashPool.push({
+                text: `* Selezionare la sigla identificativa del codice di sblocco della procedura corrente <strong>(${codCorretto})</strong>:`,
+                correct: codCorretto,
+                options: shuffle([codCorretto, `1SI-B${randProceduraNum}`, `ISI-B${randProceduraNum+3}`, `IS1-B${randProceduraNum}`, `ISI-8${randProceduraNum}`])
+            });
+
+            // Logica-Matematica: Calcolo dinamico sulle cifre dello stanziamento
+            let n1 = Math.floor(Math.random() * 7) + 1;
+            let n2 = Math.floor(Math.random() * 8) + 1;
+            let somma = n1 + n2;
+            let importoDinamico = `${n1}0${n2}.000.000,00`;
+            let mathQuestion = {
+                text: `* Selezionare, con riguardo all'ordine di presentazione nella cifra, la somma delle cifre diverse da zero presenti nello stanziamento di ${importoDinamico} euro <strong>(${n1}+${n2}=${somma})</strong>:`,
+                correct: somma.toString(),
+                options: shuffle([somma.toString(), (somma+2).toString(), (somma-1).toString(), `${n1}${n2}`, "14"])
+            };
+
+            // Stringa Lunga Generativa Opzione A: Parentesi Quadre Strutturate
+            let caratteriAbc = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+            let char1 = caratteriAbc.charAt(Math.floor(Math.random() * caratteriAbc.length));
+            let char2 = caratteriAbc.charAt(Math.floor(Math.random() * caratteriAbc.length));
+            let numId = Math.floor(Math.random() * 80) + 10;
+            let parentesiCorretta = `[${char1}-${numId}${char2}]`;
+            longPool.push({
+                text: `* Selezionare il formato esatto del codice di sicurezza alfanumerico comprensivo di parentesi quadre <strong>(${parentesiCorretta})</strong>:`,
+                correct: parentesiCorretta,
+                options: shuffle([parentesiCorretta, `([${char1}-${numId}${char2}])`, `[${char1}-${numId}8]`, `[Y-${numId}${char2}]`, `[${char1}-${numId}${char2.toLowerCase()}]`])
+            });
+
+            // Stringa Lunga Generativa Opzione B: Nome File XML con Timestamp Casuale
+            let timestampDinamico = Math.floor(Math.random() * 80000) + 10000;
+            let xmlCorretto = `DOMANDA_ISI_2025_${timestampDinamico}.xml`;
+            longPool.push({
+                text: `* Selezionare il nome esatto del file strutturato XML generato dai sistemi per l'invio della domanda <strong>(${xmlCorretto})</strong>:`,
+                correct: xmlCorretto,
+                options: shuffle([xmlCorretto, `DOMANDE_ISI_2025_${timestampDinamico}.xml`, `DOMANDA_ISI_2025_${timestampDinamico}.pdf`, `DOMANDA_ISI_2025_${timestampDinamico}.xlm`, `DOMANDA-ISI-2025-${timestampDinamico}.xml`])
+            });
+
+            // --- COMPOSIZIONE FISSA BILANCIATA ---
+            shuffle(flashPool);
+            shuffle(longPool);
+
+            // Prendiamo 3 flash + la matematica + 1 stringa lunga garantita = 5 domande totali
+            generatedQuestions = [
+                flashPool[0], flashPool[1], flashPool[2],
+                mathQuestion,
+                longPool[0]
+            ];
+
+            // Mescoliamo l'intero mazzo finale per renderne casuale l'ordine di lettura sulla pagina
+            shuffle(generatedQuestions);
+
+            // Iniezione HTML nel Container
+            const container = document.getElementById('dynamic-questions-container');
+            container.innerHTML = "";
+            generatedQuestions.forEach((q, index) => {
+                let html = `
+                    <div class="form-group">
+                        <label>${q.text}</label>
+                        <select id="dynamic-q-${index}">
+                            <option value="">- seleziona opzione -</option>
+                            ${q.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+        }
+
+        function startSimulation() {
+            generateProceduralQuestions();
+            document.getElementById('screen-welcome').classList.remove('active');
+            document.getElementById('screen-clickday').classList.add('active');
+            startTime = performance.now();
+        }
+
+        function goToSummary() {
+            let summaryHTML = `
+                <div class="summary-label">Data odierna - Giorno:</div><div class="summary-value">18</div>
+                <div class="summary-label">Data odierna - Mese:</div><div class="summary-value">Giugno</div>
+                <div class="summary-label">Data odierna - Anno:</div><div class="summary-value">2026</div>
+                <div class="summary-label">Nome Utente:</div><div class="summary-value">Mario Rossi</div>
+            `;
+
+            generatedQuestions.forEach((q, index) => {
+                let userAns = document.getElementById(`dynamic-q-${index}`).value;
+                let cleanLabel = q.text.replace(/<[^>]*>?/gm, '').replace(':','');
+                summaryHTML += `
+                    <div class="summary-label">${cleanLabel}:</div>
+                    <div class="summary-value">${userAns !== "" ? userAns : '- non selezionato -'}</div>
+                `;
+            });
+
+            const checkRegole = document.getElementById('check-regole').checked;
+            summaryHTML += `
+                <div class="summary-label">Dichiarazione:</div>
+                <div class="summary-value">${checkRegole ? 'Ho preso visione delle regole tecniche.' : 'Non spuntato'}</div>
+            `;
+
+            document.getElementById('summary-content').innerHTML = summaryHTML;
+            document.getElementById('screen-clickday').classList.remove('active');
+            document.getElementById('screen-summary').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function goBackToEdit() {
+            document.getElementById('screen-summary').classList.remove('active');
+            document.getElementById('screen-clickday').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function submitApplication() {
+            document.getElementById('error-message').style.display = 'none';
+            let allCorrect = true;
+
+            generatedQuestions.forEach((q, index) => {
+                let userAns = document.getElementById(`dynamic-q-${index}`).value;
+                if (userAns !== q.correct) {
+                    allCorrect = false;
+                }
+            });
+
+            const checkRegole = document.getElementById('check-regole').checked;
+            const checkRobot = document.getElementById('check-robot').checked;
+            const checkInformativa = document.getElementById('check-informativa').checked;
+
+            if (allCorrect && checkRegole && checkRobot && checkInformativa) {
+                const endTime = performance.now();
+                const timeDiff = endTime - startTime;
+
+                const minutes = Math.floor(timeDiff / 60000);
+                const seconds = Math.floor((timeDiff % 60000) / 1000);
+                const milliseconds = Math.floor(timeDiff % 1000);
+
+                const formattedTime = 
+                    (minutes < 10 ? "0" : "") + minutes + " min, " + 
+                    (seconds < 10 ? "0" : "") + seconds + " sec e " + 
+                    (milliseconds < 100 ? (milliseconds < 10 ? "00" : "0") : "") + milliseconds + " msec";
+
+                document.getElementById('final-time').innerText = formattedTime;
+
+                document.getElementById('screen-summary').classList.remove('active');
+                document.getElementById('screen-success').classList.add('active');
+                window.scrollTo(0, 0);
+            } else {
+                document.getElementById('screen-summary').classList.remove('active');
+                document.getElementById('screen-clickday').classList.add('active');
+                document.getElementById('error-message').style.display = 'block';
+                window.scrollTo(0, 0);
+            }
+        }
+    </script>
+</body>
+</html>
